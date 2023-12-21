@@ -19,3 +19,28 @@ update.addEventListener('click', _ => {
       window.location.reload(true);
     });
 })
+const messageDiv = document.querySelector('#message');
+
+const deleteButton = document.querySelector('#delete-button');
+
+deleteButton.addEventListener('click', _ => {
+  fetch('/quotes', {
+    method: 'delete',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Darth Vader',
+    })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to delete this resource...')
+      return res.json();
+    })
+    .then(res => {
+      console.log(res)
+      if (res === 'No quote to delete!') {
+        messageDiv.textContent = 'No Darth Vader quote to delete';
+      } else {
+        // window.location.reload(); 
+      }
+    });
+});
