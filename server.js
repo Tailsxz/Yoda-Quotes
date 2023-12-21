@@ -16,6 +16,14 @@ app.set('view engine', 'ejs');
 //   console.log('Connected to Database');
 // })
 
+// app.use(bodyParser.urlencoded({ extended: true }))
+//deprecated! Express has a builtin body parser now build to work exactly like the body-parser tooling
+app.use(express.urlencoded());//Parse URL-encoded bodies
+// app.use(bodyParser.json()) No longer needed!
+//app.use(express.json()); //used to parse JSON bodies.
+
+app.use(express.json());//Need to teach our server to accept JSON data!
+
 //Supports promises so we can write our code like this!
 MongoClient.connect(uriConnectionString)
   .then(client => {
@@ -41,6 +49,27 @@ MongoClient.connect(uriConnectionString)
         })
         .catch(error => console.error(error));
     })
+
+    app.put('/quotes', (req, res) => {
+      console.log(req.body);
+      quotesCollection
+        .findOneAndUpdate({ name: 'Yoda'},//query
+        {//update
+          $set: {
+            name: req.body.name,
+            quote: req.body.quote,
+          },
+        },
+        {
+          //options
+          upsert: true,
+        })
+        .then(result => {
+          res.json('Success');
+          console.log(result);
+        })
+        .catch(error => console.error(error));
+    })
     
     app.post('/quotes', (req, res) => {
       quotesCollection
@@ -55,9 +84,4 @@ MongoClient.connect(uriConnectionString)
   })
   .catch(error => console.error(error));
 
-// app.use(bodyParser.urlencoded({ extended: true }))
-//deprecated! Express has a builtin body parser now build to work exactly like the body-parser tooling
-app.use(express.urlencoded())//Parse URL-encoded bodies
-// app.use(bodyParser.json()) No longer needed!
-//app.use(express.json()); //used to parse JSON bodies.
 
