@@ -8,6 +8,7 @@ const password = encodeURIComponent('tM68JrIZJj3qpyiP');
 
 let uriConnectionString = `mongodb+srv://${username}:${password}@cluster0.ltfnp9i.mongodb.net/?retryWrites=true&w=majority`;
 
+app.use(express.static('public'))
 app.set('view engine', 'ejs');
 
 // MongoClient.connect(uriConnectionString, (err, client) => {
@@ -28,14 +29,16 @@ MongoClient.connect(uriConnectionString)
     
     app.get('/', (req, res) => {
       // res.send('Hello World')//send method of the response object, allows us to send back a HTTP response. In this case a string of Hello World
-      res.sendFile(__dirname + '/index.html')
+      // res.sendFile(__dirname + '/index.html')
       //allows you to transfer files across the web, will automagically set the Content-Type header field on the response object.
       //__dirname is the current directory we are in
-      console.log(__dirname);
+      // console.log(__dirname);
       db.collection('quotes')
         .find()
         .toArray()
-        .then(results => console.log(results))
+        .then(results => {
+          res.render('index.ejs', { quotes: results });
+        })
         .catch(error => console.error(error));
     })
     
