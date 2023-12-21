@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
 app.listen(process.env.PORT || 3000), function() {
@@ -12,3 +13,7 @@ app.get('/', (req, res) => {
   //__dirname is the current directory we are in
   console.log(__dirname);
 })
+
+app.post('/quotes', (req, res) => {
+  console.log('Helloooooooooooo!');
+});
