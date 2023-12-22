@@ -40,7 +40,7 @@ deleteButton.addEventListener('click', _ => {
       if (res === 'No quote to delete!') {
         messageDiv.textContent = 'No Darth Vader quote to delete';
       } else {
-        // window.location.reload(); 
+        window.location.reload(); 
       }
     });
 });
